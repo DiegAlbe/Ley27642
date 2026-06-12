@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ley 27.642 | Art. 11 Educación Alimentaria | Lic. en Nutrición UCU</title>
+    <style>
+        :root {
+            --verde-oscuro: #1B4332;
+            --verde-medio: #2D6A4F;
+            --verde-claro: #40916C;
+            --verde-suave: #52B788;
+            --verde-pastel: #D8F3DC;
+            --negro: #1A1A1A;
+            --gris-oscuro: #2D3436;
+            --gris-medio: #636E72;
+            --gris-claro: #B2BEC3;
+            --blanco: #FFFFFF;
+            --fondo: #F7FAF5;
+            --fondo-card: #FFFFFF;
+            --rojo-advertencia: #D62828;
+            --naranja: #F77F00;
+            --amarillo: #FCBF49;
+            --azul: #0077B6;
+            --sombra-suave: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --sombra-media: 0 8px 32px rgba(0, 0, 0, 0.10);
+            --sombra-fuerte: 0 12px 40px rgba(0, 0, 0, 0.15);
+            --radio: 16px;
+            --radio-grande: 24px;
+            --transicion: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--fondo);
+            color: var(--gris-oscuro);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .navbar {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(255,255,255,0.88); backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 0.6rem 2rem; display: flex; align-items: center;
+            justify-content: space-between; flex-wrap: wrap; gap: 0.8rem;
+        }
+        .navbar.scrolled { box-shadow: var(--sombra-media); background: rgba(255,255,255,0.95); }
+        .navbar .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700;
+            font-size: 1.05rem; color: var(--verde-oscuro); text-decoration: none; }
+        .navbar .logo .icono { width: 40px; height: 40px; background: var(--verde-medio);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.3rem; font-weight: 800; }
+        .nav-links { display: flex; gap: 1.2rem; list-style: none; flex-wrap: wrap; font-size: 0.9rem; font-weight: 500; }
+        .nav-links a { text-decoration: none; color: var(--gris-medio); transition: var(--transicion);
+            padding: 0.4rem 0.2rem; border-bottom: 2px solid transparent; }
+        .nav-links a:hover, .nav-links a.activo { color: var(--verde-oscuro); border-bottom-color: var(--verde-suave); }
+
+        .hero {
+            background: linear-gradient(160deg, #E8F5E9 0%, #F1F8E9 40%, #FFFDE7 100%);
+            padding: 4rem 2rem 5rem; text-align: center; position: relative; overflow: hidden;
+        }
+        .hero::after { content:''; position:absolute; width:500px; height:500px;
+            background:radial-gradient(circle, rgba(45,106,79,0.06) 0%, transparent 70%);
+            top:-120px; right:-100px; border-radius:50%; pointer-events:none; }
+        .badge-ley { display:inline-block; background:var(--verde-oscuro); color:#fff;
+            padding:0.5rem 1.4rem; border-radius:50px; font-weight:700; font-size:0.85rem;
+            letter-spacing:0.5px; margin-bottom:1.2rem; }
+        .hero h1 { font-size:clamp(2rem,5vw,3.2rem); font-weight:800; color:var(--verde-oscuro);
+            max-width:850px; margin:0 auto 1rem; line-height:1.2; letter-spacing:-0.5px; }
+        .hero h1 span { color:var(--verde-claro); position:relative; }
+        .hero h1 span::after { content:''; position:absolute; bottom:4px; left:0; width:100%;
+            height:10px; background:var(--verde-pastel); z-index:-1; border-radius:4px; }
+        .hero .subtitulo { font-size:1.15rem; color:var(--gris-medio); max-width:650px;
+            margin:0 auto 2rem; font-weight:400; }
+        .btn-hero { display:inline-block; background:var(--verde-medio); color:#fff;
+            padding:0.9rem 2.2rem; border-radius:50px; text-decoration:none; font-weight:700;
+            font-size:1rem; transition:var(--transicion); box-shadow:0 6px 24px rgba(45,106,79,0.25);
+            cursor:pointer; border:none; }
+        .btn-hero:hover { background:var(--verde-oscuro); transform:translateY(-2px);
+            box-shadow:0 10px 30px rgba(45,106,79,0.35); }
+
+        .seccion { padding:4rem 2rem; max-width:1100px; margin:0 auto; }
+        .seccion h2 { font-size:2rem; font-weight:700; color:var(--verde-oscuro);
+            margin-bottom:0.5rem; letter-spacing:-0.3px; display:flex; align-items:center; gap:0.6rem; }
+        .seccion .intro-p { color:var(--gris-medio); margin-bottom:2.5rem; max-width:700px; font-size:1.05rem; }
+        .separador { width:60px; height:4px; background:var(--verde-suave); border-radius:2px; margin:0 0 1.5rem; }
+
+        /* RECUADROS DESTACADOS (Artículos, teoría) */
+        .recuadro-ley {
+            background: #ffffff; border-left: 6px solid var(--verde-medio);
+            border-radius: 12px; padding: 1.5rem 2rem; margin: 1.8rem 0;
+            box-shadow: var(--sombra-suave); font-size: 0.98rem;
+            position: relative;
+        }
+        .recuadro-ley::before {
+            content: "📜"; position: absolute; top: 1rem; right: 1.5rem; font-size: 1.5rem;
+            opacity: 0.2;
+        }
+        .recuadro-ley.articulo11 { border-left-color: var(--naranja); background: #fffaf5; }
+        .recuadro-ley.articulo11::before { content: "📖"; color: var(--naranja); }
+        .recuadro-ley h4 { color: var(--verde-oscuro); margin-bottom: 0.3rem; font-size: 1.1rem; }
+        .recuadro-ley p { margin-bottom: 0.5rem; }
+        .recuadro-teoria {
+            background: #f0f7f4; border-left: 6px solid var(--verde-claro);
+            border-radius: 12px; padding: 1.4rem 1.8rem; margin: 1.5rem 0;
+            box-shadow: var(--sombra-suave);
+        }
+        .recuadro-teoria h4 { color: var(--verde-oscuro); display: flex; align-items: center; gap: 0.4rem; }
+        .recuadro-cronologia {
+            background: #fefefe; border: 1px solid #e0e0e0;
+            border-radius: 14px; padding: 1.5rem 1.8rem; margin: 1.5rem 0;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .grid-octogonos { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap:1.4rem; margin-top:1rem; }
+        .octo-card { background:var(--fondo-card); border-radius:var(--radio); padding:1.6rem 1rem;
+            text-align:center; box-shadow:var(--sombra-suave); cursor:pointer; transition:var(--transicion);
+            border:2px solid transparent; position:relative; min-height:200px;
+            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.6rem; }
+        .octo-card:hover { transform:translateY(-6px); box-shadow:var(--sombra-media); border-color:var(--negro); }
+        .octo-card.activa { border-color:var(--negro); box-shadow:var(--sombra-fuerte); background:#fafafa; }
+        .octogono { width:90px; height:90px; background:var(--negro);
+            clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
+            display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800;
+            font-size:0.7rem; text-transform:uppercase; letter-spacing:0.5px; text-align:center;
+            line-height:1.3; transition:var(--transicion); flex-shrink:0; }
+        .octo-card:hover .octogono { transform:scale(1.08); }
+        .octo-info { font-size:0.82rem; color:var(--gris-medio); display:none; animation: fadeInUp 0.4s ease forwards; }
+        .octo-card.activa .octo-info { display:block; }
+        .octo-card .titulo-octo { font-weight:700; font-size:0.9rem; color:var(--gris-oscuro); }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+        .acordeon { display:flex; flex-direction:column; gap:0.8rem; }
+        .acordeon-item { background:var(--fondo-card); border-radius:var(--radio);
+            box-shadow:var(--sombra-suave); overflow:hidden; border:1px solid transparent; }
+        .acordeon-item.abierto { border-color:var(--verde-pastel); box-shadow:var(--sombra-media); }
+        .acordeon-header { padding:1.2rem 1.5rem; cursor:pointer; font-weight:700;
+            font-size:1.05rem; color:var(--verde-oscuro); display:flex;
+            justify-content:space-between; align-items:center; user-select:none; }
+        .acordeon-header:hover { background:#f9fdf9; }
+        .acordeon-header .icono-acordeon { transition:var(--transicion); font-size:1.4rem; color:var(--verde-claro); }
+        .acordeon-item.abierto .icono-acordeon { transform:rotate(45deg); }
+        .acordeon-body { max-height:0; overflow:hidden; transition:max-height 0.45s ease, padding 0.3s ease;
+            padding:0 1.5rem; font-size:0.95rem; color:var(--gris-medio); line-height:1.8; }
+        .acordeon-item.abierto .acordeon-body { max-height:800px; padding:0 1.5rem 1.5rem; }
+        .acordeon-body ul { list-style:disc; padding-left:1.4rem; }
+        .acordeon-body li { margin-bottom:0.5rem; }
+
+        .calculadora-container { background:var(--fondo-card); border-radius:var(--radio-grande);
+            padding:2.5rem; box-shadow:var(--sombra-media); display:grid;
+            grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start; }
+        .calculadora-form { display:flex; flex-direction:column; gap:1.1rem; }
+        .calculadora-form label { font-weight:600; font-size:0.9rem; color:var(--gris-oscuro);
+            display:flex; flex-direction:column; gap:0.3rem; }
+        .calculadora-form input, .calculadora-form select { padding:0.7rem 1rem;
+            border:2px solid #e0e0e0; border-radius:10px; font-size:0.95rem;
+            transition:var(--transicion); background:#fafafa; font-family:inherit; width:100%; }
+        .calculadora-form input:focus, .calculadora-form select:focus { outline:none;
+            border-color:var(--verde-claro); box-shadow:0 0 0 4px rgba(64,145,108,0.1); background:#fff; }
+        .btn-calcular { background:var(--verde-medio); color:#fff; border:none;
+            padding:0.85rem; border-radius:50px; font-weight:700; font-size:1rem;
+            cursor:pointer; transition:var(--transicion); margin-top:0.3rem; }
+        .btn-calcular:hover { background:var(--verde-oscuro); box-shadow:0 6px 20px rgba(45,106,79,0.3); }
+        .resultado-calc { background:#f9fbf9; border-radius:var(--radio); padding:2rem;
+            text-align:center; display:flex; flex-direction:column; gap:1.2rem;
+            align-items:center; justify-content:center; min-height:280px; border:2px dashed #dce8dc; }
+        .sellos-resultado { display:flex; flex-wrap:wrap; gap:0.8rem; justify-content:center; }
+        .sello-resultado-item { width:80px; height:80px; background:var(--negro);
+            clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
+            display:flex; align-items:center; justify-content:center; color:#fff;
+            font-weight:800; font-size:0.6rem; text-transform:uppercase; text-align:center;
+            line-height:1.2; animation: popIn 0.5s ease forwards; }
+        @keyframes popIn { 0%{transform:scale(0);opacity:0;} 70%{transform:scale(1.15);} 100%{transform:scale(1);opacity:1;} }
+        .sin-sellos { color:var(--verde-claro); font-weight:700; font-size:1.1rem; }
+
+        .quiz-container { background:var(--fondo-card); border-radius:var(--radio-grande);
+            padding:2rem; box-shadow:var(--sombra-suave); max-width:700px; margin:0 auto; }
+        .quiz-pregunta { font-weight:700; font-size:1.15rem; margin-bottom:1.2rem; color:var(--verde-oscuro); }
+        .quiz-opciones { display:flex; flex-direction:column; gap:0.6rem; }
+        .quiz-opcion { padding:0.9rem 1.2rem; border:2px solid #e0e0e0; border-radius:12px;
+            cursor:pointer; transition:var(--transicion); font-weight:500; background:#fafafa; }
+        .quiz-opcion:hover { border-color:var(--verde-claro); background:#f5fdf7; }
+        .quiz-opcion.correcta { border-color:#2D6A4F!important; background:#D8F3DC!important; color:#1B4332!important; }
+        .quiz-opcion.incorrecta { border-color:#D62828!important; background:#FFE5E5!important; color:#8B0000!important; }
+        .quiz-feedback { margin-top:1rem; font-weight:600; font-size:0.95rem; min-height:1.5rem; }
+        .btn-quiz-siguiente { background:var(--verde-medio); color:#fff; border:none;
+            padding:0.7rem 1.8rem; border-radius:50px; font-weight:700; cursor:pointer;
+            transition:var(--transicion); margin-top:1rem; display:none; }
+        .btn-quiz-siguiente:hover { background:var(--verde-oscuro); }
+
+        .footer { background:var(--verde-oscuro); color:#c8e6c9; text-align:center;
+            padding:2rem; font-size:0.85rem; line-height:1.8; }
+        .footer strong { color:#fff; }
+
+        @media (max-width:768px) {
+            .calculadora-container { grid-template-columns:1fr; padding:1.5rem; }
+            .navbar { padding:0.5rem 1rem; justify-content:center; }
+            .nav-links { gap:0.7rem; font-size:0.78rem; }
+            .hero { padding:2.5rem 1rem 3.5rem; }
+            .hero h1 { font-size:1.6rem; }
+            .seccion { padding:2.5rem 1rem; }
+            .grid-octogonos { grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:0.8rem; }
+            .octogono { width:65px; height:65px; font-size:0.55rem; }
+            .octo-card { padding:1rem 0.6rem; min-height:160px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="logo"><span class="icono">🥗</span><span>Nutrición UCU — Ley 27.642</span></a>
+        <ul class="nav-links">
+            <li><a href="#que-es">La Ley</a></li>
+            <li><a href="#articulo11">Artículo 11</a></li>
+            <li><a href="#octogonos">Sellos</a></li>
+            <li><a href="#calculadora">Calculadora</a></li>
+            <li><a href="#defensa">Defensa profesional</a></li>
+            <li><a href="#quiz">Quiz</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+        <span class="badge-ley">Ley Nacional N° 27.642</span>
+        <h1>Promoción de la <span>Alimentación Saludable</span></h1>
+        <p class="subtitulo">
+            <strong>Ley de Etiquetado Frontal</strong>. Su corazón late en el <em>Artículo 11: Educación Alimentaria Nutricional</em>, una herramienta que transforma el rol del Licenciado en Nutrición como agente de cambio.
+        </p>
+        <button class="btn-hero" onclick="document.getElementById('articulo11').scrollIntoView({behavior:'smooth'})">
+            📖 Conocé el Artículo 11
+        </button>
+    </header>
+
+    <!-- SECCIÓN: ¿QUÉ ES? + REDACCIÓN -->
+    <section class="seccion" id="que-es">
+        <h2>📋 ¿Qué es la Ley 27.642?</h2>
+        <div class="separador"></div>
+        <p class="intro-p">
+            Sancionada en 2021, esta ley establece la obligatoriedad de incluir <strong>sellos de advertencia</strong> en el frente de los envases cuando los productos contengan cantidades excesivas de nutrientes críticos. Pero su alcance es mucho mayor: incorpora la <strong>educación alimentaria como política de Estado</strong>.
+        </p>
+
+        <!-- RECUADRO: CÓMO SE REDACTÓ -->
+        <div class="recuadro-cronologia">
+            <h4 style="margin-bottom:0.5rem; color:var(--verde-oscuro);">📅 ¿Cómo se redactó esta ley?</h4>
+            <p style="margin-bottom:0.5rem;">La Ley 27.642 fue resultado de un <strong>proceso participativo y federal</strong>, impulsado por organizaciones de la sociedad civil, sociedades científicas (como la Sociedad Argentina de Nutrición), universidades nacionales y el Consejo Federal de Legisladores de la Salud. Se basó en:</p>
+            <ul style="padding-left:1.5rem; color:var(--gris-medio);">
+                <li><strong>Evidencia científica internacional</strong> (modelo de perfil de nutrientes de OPS/OMS).</li>
+                <li><strong>Experiencias exitosas</strong> en Chile, Perú, Uruguay y México.</li>
+                <li><strong>Audiencias públicas y consultas</strong> con la industria, consumidores y equipos de salud.</li>
+                <li><strong>Recomendaciones de la Relatoría Especial de la ONU</strong> sobre el derecho a la alimentación.</li>
+            </ul>
+            <p style="font-size:0.85rem; margin-top:0.5rem;">Fue aprobada por amplia mayoría en ambas Cámaras del Congreso, reflejando un consenso sobre la urgencia de enfrentar la malnutrición desde la <em>prevención y la información</em>.</p>
+        </div>
+
+        <div class="acordeon">
+            <div class="acordeon-item" id="aco1">
+                <div class="acordeon-header" onclick="toggleAcordeon('aco1')">🎯 Objetivo y espíritu de la ley <span class="icono-acordeon">+</span></div>
+                <div class="acordeon-body">
+                    Garantizar el <strong>derecho a la información</strong> clara y veraz, promover la <strong>alimentación saludable</strong> y prevenir las Enfermedades Crónicas No Transmisibles (ECNT). La ley reconoce que la malnutrición es un problema multicausal y que la educación es un pilar fundamental.
+                </div>
+            </div>
+            <div class="acordeon-item" id="aco2">
+                <div class="acordeon-header" onclick="toggleAcordeon('aco2')">🚫 Prohibiciones clave <span class="icono-acordeon">+</span></div>
+                <div class="acordeon-body">
+                    <ul>
+                        <li>Publicidad dirigida a niños, niñas y adolescentes de productos con sellos.</li>
+                        <li>Venta de productos con al menos un sello en quioscos y cantinas escolares.</li>
+                        <li>Uso de personajes infantiles, celebridades o dibujos animados en envases con sellos.</li>
+                        <li>Promociones comerciales (2x1, regalos) en productos con sellos.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: ARTÍCULO 11 - EDUCACIÓN ALIMENTARIA NUTRICIONAL -->
+    <section class="seccion" id="articulo11" style="background:#fff; border-radius:var(--radio-grande); padding:3rem 2rem; margin:2rem auto;">
+        <h2>📖 Artículo 11: Educación Alimentaria Nutricional</h2>
+        <div class="separador"></div>
+        <p class="intro-p">
+            El verdadero cambio cultural no se logra solo con sellos. La ley deposita en la <strong>educación alimentaria</strong> la herramienta para transformar hábitos desde el conocimiento. El Artículo 11 la establece como política de Estado.
+        </p>
+
+        <!-- RECUADRO TEXTO DEL ARTÍCULO 11 -->
+        <div class="recuadro-ley articulo11">
+            <h4>📜 Texto del Artículo 11 (Ley 27.642)</h4>
+            <p><em>“El Consejo Federal de Educación deberá promover la inclusión de la educación alimentaria nutricional en el currículo de los establecimientos educativos de gestión estatal y privada, en todos los niveles y modalidades, conforme a los lineamientos de la política nacional de alimentación saludable.”</em></p>
+            <p style="font-size:0.85rem; color:var(--gris-medio);">Además, la ley dispone la capacitación docente y la elaboración de materiales educativos en articulación con el Ministerio de Salud y organismos especializados.</p>
+        </div>
+
+        <!-- RECUADROS TEÓRICOS: ¿POR QUÉ DEFENDERLA? -->
+        <div class="recuadro-teoria">
+            <h4>🧠 Sustento teórico: ¿por qué es irrenunciable?</h4>
+            <p>La <strong>educación alimentaria nutricional (EAN)</strong> es una estrategia de salud pública basada en:</p>
+            <ul style="padding-left:1.4rem;">
+                <li><strong>El derecho a la alimentación adecuada</strong> (Art. 25, DUDH; PIDESC). Informar no alcanza si no se enseña a interpretar.</li>
+                <li><strong>La teoría del empoderamiento</strong>: el consumidor informado y educado toma decisiones autónomas, reduciendo la brecha de desigualdad.</li>
+                <li><strong>El modelo ecológico de la salud</strong>: la escuela es un entorno clave donde se moldean preferencias y hábitos.</li>
+                <li><strong>La prevención de ECNT</strong>: la OMS recomienda la EAN como intervención costo-efectiva para reducir obesidad, diabetes e hipertensión.</li>
+            </ul>
+            <p style="margin-top:0.5rem;">Sin educación, los sellos pueden ser ignorados o malinterpretados. <strong>El nutricionista es el traductor natural</strong> entre la norma y la vida cotidiana.</p>
+        </div>
+
+        <div class="recuadro-teoria" style="background:#fff9f0; border-left-color:var(--naranja);">
+            <h4>⚖️ Defender el Artículo 11 como profesionales de la nutrición</h4>
+            <p>Defender esta ley es <strong>defender nuestro campo de incumbencia</strong>. Como futuros licenciados, nos compete:</p>
+            <ul style="padding-left:1.4rem;">
+                <li>Garantizar que la EAN no sea un contenido marginal, sino transversal y basado en evidencia.</li>
+                <li>Participar activamente en la elaboración de materiales y capacitaciones docentes.</li>
+                <li>Vigilar que la implementación no se diluya por presiones comerciales.</li>
+                <li>Ser la voz técnica que conecte el currículo escolar con la realidad alimentaria de cada comunidad.</li>
+            </ul>
+            <p style="font-size:0.9rem; margin-top:0.5rem;"><strong>Un nutricionista en cada escuela no es un lujo, es una necesidad que la ley habilita.</strong></p>
+        </div>
+
+        <p style="text-align:center; font-size:0.9rem; color:var(--gris-medio);">
+            💡 La Ley 27.642 nos da el marco; <strong>nosotros ponemos la ciencia y la pedagogía</strong>.
+        </p>
+    </section>
+
+    <!-- SECCIÓN OCTÓGONOS -->
+    <section class="seccion" id="octogonos" style="background:#fff; border-radius:var(--radio-grande); padding:3rem 2rem; margin-top:1rem;">
+        <h2>🛑 Los octógonos negros</h2>
+        <div class="separador"></div>
+        <p class="intro-p">Cada sello advierte sobre el exceso de un nutriente crítico. Hacé clic en cada tarjeta para conocer los límites establecidos.</p>
+        <div class="grid-octogonos" id="gridOctogonos">
+            <div class="octo-card" onclick="toggleOctoCard(this)" data-sello="azucares">
+                <div class="octogono">EXCESO EN<br>AZÚCARES</div>
+                <span class="titulo-octo">Azúcares añadidos</span>
+                <div class="octo-info">Límite: ≥10% de las calorías totales provienen de azúcares añadidos.</div>
+            </div>
+            <div class="octo-card" onclick="toggleOctoCard(this)" data-sello="grasas-totales">
+                <div class="octogono">EXCESO EN<br>GRASAS TOTALES</div>
+                <span class="titulo-octo">Grasas totales</span>
+                <div class="octo-info">Límite: ≥30% de las calorías totales.</div>
+            </div>
+            <div class="octo-card" onclick="toggleOctoCard(this)" data-sello="grasas-saturadas">
+                <div class="octogono">EXCESO EN<br>GRASAS SATURADAS</div>
+                <span class="titulo-octo">Grasas saturadas</span>
+                <div class="octo-info">Límite: ≥10% de las calorías totales.</div>
+            </div>
+            <div class="octo-card" onclick="toggleOctoCard(this)" data-sello="sodio">
+                <div class="octogono">EXCESO EN<br>SODIO</div>
+                <span class="titulo-octo">Sodio</span>
+                <div class="octo-info">Sólidos: ≥400 mg/100g. Bebidas: ≥40 mg/100ml.</div>
+            </div>
+            <div class="octo-card" onclick="toggleOctoCard(this)" data-sello="calorias">
+                <div class="octogono">EXCESO EN<br>CALORÍAS</div>
+                <span class="titulo-octo">Calorías</span>
+                <div class="octo-info">Sólidos: ≥275 kcal/100g. Bebidas sin alcohol: ≥70 kcal/100ml.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALCULADORA -->
+    <section class="seccion" id="calculadora">
+        <h2>🧮 Calculadora interactiva de sellos</h2>
+        <div class="separador"></div>
+        <p class="intro-p">Simulá el análisis de un producto. Ingresá los valores por cada 100g/ml y determiná qué sellos le corresponderían según la ley.</p>
+        <div class="calculadora-container">
+            <div class="calculadora-form">
+                <label>Tipo de producto <select id="tipoProducto">
+                    <option value="solido">Alimento sólido (100g)</option>
+                    <option value="bebida-sin-alcohol">Bebida sin alcohol (100ml)</option>
+                    <option value="bebida-alcohol">Bebida alcohólica (100ml)</option>
+                </select></label>
+                <label>Calorías (kcal) <input type="number" id="calorias" placeholder="Ej: 320" min="0" step="0.1"></label>
+                <label>Azúcares añadidos (g) <input type="number" id="azucares" placeholder="Ej: 12" min="0" step="0.1"></label>
+                <label>Grasas totales (g) <input type="number" id="grasasTotales" placeholder="Ej: 15" min="0" step="0.1"></label>
+                <label>Grasas saturadas (g) <input type="number" id="grasasSaturadas" placeholder="Ej: 5" min="0" step="0.1"></label>
+                <label>Sodio (mg) <input type="number" id="sodio" placeholder="Ej: 450" min="0" step="0.1"></label>
+                <button class="btn-calcular" onclick="calcularSellos()">🔬 Calcular sellos</button>
+            </div>
+            <div class="resultado-calc" id="resultadoCalc">
+                <span class="placeholder-calc">📦 Aquí aparecerán los sellos<br>correspondientes.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DEFENSA PROFESIONAL AMPLIADA -->
+    <section class="seccion" id="defensa" style="background:#fff; border-radius:var(--radio-grande); padding:3rem 2rem; margin:2rem auto;">
+        <h2>🛡️ ¿Por qué defender esta ley como profesionales?</h2>
+        <div class="separador"></div>
+        <p class="intro-p">Más allá del etiquetado, la Ley 27.642 es una herramienta de <strong>soberanía alimentaria y justicia social</strong>. Como nutricionistas, somos garantes de su correcta implementación y guardianes de su espíritu.</p>
+        <div class="acordeon">
+            <div class="acordeon-item" id="def1">
+                <div class="acordeon-header" onclick="toggleAcordeon('def1')">🧭 Porque la salud es un derecho, no un negocio <span class="icono-acordeon">+</span></div>
+                <div class="acordeon-body">
+                    La ley limita la interferencia de la industria alimentaria en la formación de hábitos, especialmente en la infancia. Defenderla es priorizar la salud pública por sobre los intereses comerciales, un principio ético fundamental de nuestra profesión.
+                </div>
+            </div>
+            <div class="acordeon-item" id="def2">
+                <div class="acordeon-header" onclick="toggleAcordeon('def2')">📚 Porque sin educación, la información es estéril <span class="icono-acordeon">+</span></div>
+                <div class="acordeon-body">
+                    El Artículo 11 nos convoca a ser <strong>educadores</strong>. La sola presencia de octógonos no modifica conductas si no hay un proceso pedagógico. Nuestro rol es diseñar intervenciones educativas que traduzcan la advertencia en decisión consciente.
+                </div>
+            </div>
+            <div class="acordeon-item" id="def3">
+                <div class="acordeon-header" onclick="toggleAcordeon('def3')">🌎 Porque construye entornos saludables <span class="icono-acordeon">+</span></div>
+                <div class="acordeon-body">
+                    Al prohibir la venta en escuelas y la publicidad dirigida, la ley crea <strong>entornos protectores</strong>. El nutricionista es clave para auditar, asesorar y formar a las comunidades educativas, asegurando que los quioscos y comedores escolares sean espacios de salud.
+                </div>
+            </div>
+            <div class="acordeon-item" id="def4">
+                <div class="acordeon-header" onclick="toggleAcordeon('def4')">🔬 Porque está basada en la mejor evidencia disponible <span class="icono-acordeon">+</span></div>
+                <div class="acordeon-body">
+                    Los perfiles de nutrientes de OPS, los estudios de impacto en Chile y Uruguay, y las recomendaciones de la OMS respaldan cada artículo. Defenderla es defender la <strong>práctica basada en evidencia</strong>, pilar de la formación universitaria en nutrición.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="seccion" id="quiz">
+        <h2>❓ Poné a prueba tus conocimientos</h2>
+        <div class="separador"></div>
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-pregunta" id="quizPregunta"></div>
+            <div class="quiz-opciones" id="quizOpciones"></div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+            <button class="btn-quiz-siguiente" id="btnQuizSiguiente" onclick="siguientePregunta()">Siguiente ▶</button>
+            <div class="quiz-puntaje" id="quizPuntaje" style="display:none;"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>
+            <strong>Universidad de Concepción del Uruguay</strong> — Licenciatura en Nutrición<br>
+            Cátedra: Economía General y Familiar — 2° Año<br>
+            <strong>Ley Nacional N° 27.642</strong> · Artículo 11: Educación Alimentaria Nutricional<br>
+            © 2026 — Material didáctico interactivo. Basado en normativa oficial argentina.
+        </p>
+    </footer>
+
+    <script>
+        // Navbar scroll
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
+        });
+
+        // Acordeón
+        function toggleAcordeon(id) {
+            const item = document.getElementById(id);
+            if (!item) return;
+            const seccion = item.closest('.acordeon');
+            if (seccion) {
+                seccion.querySelectorAll('.acordeon-item.abierto').forEach(el => {
+                    if (el !== item) el.classList.remove('abierto');
+                });
+            }
+            item.classList.toggle('abierto');
+        }
+
+        // Tarjetas de octógonos
+        function toggleOctoCard(card) {
+            const grid = document.getElementById('gridOctogonos');
+            grid.querySelectorAll('.octo-card').forEach(c => c !== card && c.classList.remove('activa'));
+            card.classList.toggle('activa');
+        }
+
+        // Calculadora de sellos
+        function calcularSellos() {
+            const tipo = document.getElementById('tipoProducto').value;
+            const calorias = parseFloat(document.getElementById('calorias').value) || 0;
+            const azucares = parseFloat(document.getElementById('azucares').value) || 0;
+            const grasasTot = parseFloat(document.getElementById('grasasTotales').value) || 0;
+            const grasasSat = parseFloat(document.getElementById('grasasSaturadas').value) || 0;
+            const sodio = parseFloat(document.getElementById('sodio').value) || 0;
+            const res = document.getElementById('resultadoCalc');
+
+            if (calorias <= 0 && azucares <= 0 && grasasTot <= 0 && grasasSat <= 0 && sodio <= 0) {
+                res.innerHTML = '<span class="placeholder-calc" style="color:#e67e22;">⚠️ Ingresá al menos un valor.</span>';
+                return;
+            }
+            const sellos = [];
+            const kcalAz = azucares * 4, kcalGT = grasasTot * 9, kcalGS = grasasSat * 9;
+            if (calorias > 0) {
+                if ((kcalAz/calorias)*100 >= 10 && azucares>0) sellos.push('EXCESO EN<br>AZÚCARES');
+                if ((kcalGT/calorias)*100 >= 30 && grasasTot>0) sellos.push('EXCESO EN<br>GRASAS TOTALES');
+                if ((kcalGS/calorias)*100 >= 10 && grasasSat>0) sellos.push('EXCESO EN<br>GRASAS SATURADAS');
+            }
+            if (tipo === 'solido' && sodio >= 400) sellos.push('EXCESO EN<br>SODIO');
+            else if ((tipo === 'bebida-sin-alcohol' || tipo === 'bebida-alcohol') && sodio >= 40) sellos.push('EXCESO EN<br>SODIO');
+            if (tipo === 'solido' && calorias >= 275) sellos.push('EXCESO EN<br>CALORÍAS');
+            else if (tipo === 'bebida-sin-alcohol' && calorias >= 70) sellos.push('EXCESO EN<br>CALORÍAS');
+            else if (tipo === 'bebida-alcohol' && calorias >= 25) sellos.push('EXCESO EN<br>CALORÍAS');
+
+            if (sellos.length === 0) {
+                res.innerHTML = '<span class="sin-sellos">✅ Este producto <strong>NO</strong> llevaría sellos de advertencia.</span>';
+            } else {
+                let html = '<div class="sellos-resultado">';
+                sellos.forEach(s => html += `<div class="sello-resultado-item">${s}</div>`);
+                html += `</div><p style="font-size:0.85rem;">Llevaría <strong>${sellos.length} sello(s)</strong> de advertencia.</p>`;
+                res.innerHTML = html;
+            }
+        }
+
+        // Quiz actualizado con énfasis en Artículo 11
+        const preguntas = [
+            {
+                pregunta: '¿Qué establece el Artículo 11 de la Ley 27.642?',
+                opciones: [
+                    'La obligación de los sellos frontales en todos los envases',
+                    'La promoción de la educación alimentaria nutricional en el currículo escolar',
+                    'La prohibición de publicidad dirigida a niños',
+                    'Los límites de sodio en alimentos procesados'
+                ],
+                correcta: 1,
+                explicacion: 'El Artículo 11 ordena al Consejo Federal de Educación promover la inclusión de la educación alimentaria nutricional en todos los niveles educativos.'
+            },
+            {
+                pregunta: '¿Por qué es fundamental defender el Artículo 11 como nutricionistas?',
+                opciones: [
+                    'Porque permite que solo los médicos enseñen nutrición',
+                    'Porque convierte a la educación alimentaria en una política de Estado, y nosotros somos los profesionales idóneos para implementarla',
+                    'Porque prohíbe completamente la venta de ultraprocesados',
+                    'Porque elimina la necesidad de otros profesionales de la salud'
+                ],
+                correcta: 1,
+                explicacion: 'El artículo nos da el marco legal para que la educación alimentaria sea parte del sistema educativo, y el Lic. en Nutrición es quien puede liderar ese proceso con base científica.'
+            },
+            {
+                pregunta: '¿Cuál fue una de las bases para redactar la Ley 27.642?',
+                opciones: [
+                    'Recomendaciones de la industria alimentaria',
+                    'El modelo de perfil de nutrientes de la OPS/OMS y experiencias de otros países',
+                    'Un estudio exclusivo de una universidad privada',
+                    'La ausencia total de evidencia internacional'
+                ],
+                correcta: 1,
+                explicacion: 'Se utilizó el modelo de perfil de nutrientes de la OPS, sumado a la experiencia de Chile, Perú, Uruguay y México, y las recomendaciones de la ONU.'
+            },
+            {
+                pregunta: 'Un alimento sólido con 300 kcal, 18g de grasas totales y 350mg de sodio por 100g, ¿qué sellos tendría?',
+                opciones: ['Solo exceso en grasas totales', 'Exceso en grasas totales y sodio', 'Exceso en sodio y calorías', 'Ninguno'],
+                correcta: 0,
+                explicacion: 'Grasas totales: 18x9=162 kcal → 54% (≥30% → SELLO). Sodio 350mg < 400mg → sin sello. Calorías 300 > 275 → llevaría también sello de calorías. Pero en las opciones la más precisa es "exceso en grasas totales y calorías" no está listada. Sin embargo la opción 0 es "Solo exceso en grasas totales" es incorrecta porque también tiene calorías. Revisamos: 300kcal > 275, así que también lleva exceso en calorías. Pero las opciones: 0 solo grasas totales, 1 grasas y sodio, 2 sodio y calorías, 3 ninguno. Dado que lleva grasas totales y calorías, ninguna opción es perfecta. Corregiré opción 1 para que sea "Exceso en grasas totales y calorías". Haré ese ajuste para que el quiz sea coherente.'
+            },
+            {
+                pregunta: 'Además de la educación escolar, ¿qué otra acción clave promueve la ley para el entorno educativo?',
+                opciones: [
+                    'Obligatoriedad de comedores gourmet en escuelas',
+                    'Prohibición de venta de productos con sellos en quioscos y cantinas escolares',
+                    'Distribución gratuita de suplementos vitamínicos',
+                    'Cierre de todos los quioscos escolares'
+                ],
+                correcta: 1,
+                explicacion: 'La ley prohíbe la venta de productos que contengan al menos un sello de advertencia en los establecimientos educativos, creando entornos más saludables.'
+            }
+        ];
+
+        // Corregir opción de pregunta 4 para que sea precisa
+        preguntas[3].opciones = [
+            'Solo exceso en grasas totales',
+            'Exceso en grasas totales y en calorías',
+            'Exceso en sodio y calorías',
+            'Ninguno'
+        ];
+        preguntas[3].correcta = 1; // grasas totales y calorías
+        preguntas[3].explicacion = 'Grasas totales: 54% del VCT (≥30% → SELLO). Calorías: 300 kcal/100g (≥275 → SELLO). Sodio 350 mg no alcanza el límite. Corresponde doble sello: grasas totales y calorías.';
+
+        let preguntaActual = 0, puntaje = 0, respondida = false;
+
+        function cargarPregunta() {
+            respondida = false;
+            const q = preguntas[preguntaActual];
+            document.getElementById('quizPregunta').textContent = `Pregunta ${preguntaActual+1} de ${preguntas.length}: ${q.pregunta}`;
+            const opcionesDiv = document.getElementById('quizOpciones');
+            opcionesDiv.innerHTML = '';
+            q.opciones.forEach((op, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'quiz-opcion';
+                btn.textContent = op;
+                btn.onclick = () => seleccionarOpcion(idx, btn);
+                opcionesDiv.appendChild(btn);
+            });
+            document.getElementById('quizFeedback').textContent = '';
+            document.getElementById('btnQuizSiguiente').style.display = 'none';
+            document.getElementById('quizPuntaje').style.display = 'none';
+            document.querySelectorAll('.quiz-opcion').forEach(b => {
+                b.classList.remove('correcta','incorrecta');
+                b.style.pointerEvents = 'auto';
+            });
+        }
+
+        function seleccionarOpcion(idx, btn) {
+            if (respondida) return;
+            respondida = true;
+            const q = preguntas[preguntaActual];
+            const opciones = document.querySelectorAll('.quiz-opcion');
+            opciones.forEach(b => b.style.pointerEvents = 'none');
+            opciones[q.correcta].classList.add('correcta');
+            if (idx === q.correcta) {
+                puntaje++;
+                document.getElementById('quizFeedback').innerHTML = '✅ ¡Correcto! ' + q.explicacion;
+                document.getElementById('quizFeedback').style.color = '#2D6A4F';
+            } else {
+                btn.classList.add('incorrecta');
+                document.getElementById('quizFeedback').innerHTML = '❌ Incorrecto. ' + q.explicacion;
+                document.getElementById('quizFeedback').style.color = '#D62828';
+            }
+            document.getElementById('btnQuizSiguiente').style.display = 'inline-block';
+        }
+
+        function siguientePregunta() {
+            preguntaActual++;
+            if (preguntaActual < preguntas.length) {
+                cargarPregunta();
+            } else {
+                document.getElementById('quizPregunta').textContent = '🎉 ¡Completaste el quiz!';
+                document.getElementById('quizOpciones').innerHTML = '';
+                document.getElementById('quizFeedback').textContent = '';
+                document.getElementById('btnQuizSiguiente').style.display = 'none';
+                const puntajeDiv = document.getElementById('quizPuntaje');
+                puntajeDiv.style.display = 'block';
+                const porcentaje = Math.round((puntaje / preguntas.length) * 100);
+                let mensaje = porcentaje === 100 ? '🌟 ¡Excelente! Conocés la ley y su Artículo 11 a la perfección.' :
+                    porcentaje >= 60 ? '👍 Muy bien. Seguí profundizando en el espíritu de la ley.' :
+                    '📚 Te invitamos a repasar el Artículo 11 y la defensa profesional.';
+                puntajeDiv.textContent = `Puntaje: ${puntaje} de ${preguntas.length} (${porcentaje}%) — ${mensaje}`;
+                const btnReiniciar = document.createElement('button');
+                btnReiniciar.className = 'btn-quiz-siguiente';
+                btnReiniciar.textContent = '🔄 Reiniciar Quiz';
+                btnReiniciar.style.display = 'inline-block';
+                btnReiniciar.onclick = () => {
+                    preguntaActual = 0; puntaje = 0;
+                    cargarPregunta();
+                    document.getElementById('quizPuntaje').style.display = 'none';
+                    btnReiniciar.remove();
+                };
+                document.getElementById('quizContainer').appendChild(btnReiniciar);
+            }
+        }
+        cargarPregunta();
+    </script>
+</body>
+</html>
